@@ -13,10 +13,16 @@ function App() {
   return (
     <div className="h-screen flex flex-col bg-gray-900 text-white overflow-hidden">
       {/* 固定ヘッダー */}
-      <div className="shrink-0 px-4 pt-4 pb-2 sm:px-8 sm:pt-6 flex flex-col gap-3 max-w-2xl w-full mx-auto">
-        <h1 className="text-2xl font-bold tracking-tight">Tinnitus Synth</h1>
-        <MasterControl />
-        <FrequencyDisplay analyserRef={analyserRef} />
+      <div className="shrink-0 px-4 pt-4 pb-2 sm:px-8 sm:pt-6 flex flex-col gap-3">
+        {/* タイトル・マスターコントロール: 狭めに揃える */}
+        <div className="max-w-2xl w-full mx-auto flex flex-col gap-3">
+          <h1 className="text-2xl font-bold tracking-tight">Tinnitus Synth</h1>
+          <MasterControl />
+        </div>
+        {/* スペクトラム: より広い幅で表示 */}
+        <div className="max-w-4xl w-full mx-auto">
+          <FrequencyDisplay analyserRef={analyserRef} />
+        </div>
       </div>
 
       {/* スクロール可能なチャンネルリスト */}
