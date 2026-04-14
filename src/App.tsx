@@ -5,7 +5,7 @@ import { ChannelStrip } from './components/ChannelStrip'
 import { FrequencyDisplay } from './components/FrequencyDisplay'
 
 function App() {
-  useAudioEngine()
+  const { analyserRef } = useAudioEngine()
 
   const channels = useSynthStore((s) => s.channels)
   const addChannel = useSynthStore((s) => s.addChannel)
@@ -19,7 +19,7 @@ function App() {
 
         <MasterControl />
 
-        <FrequencyDisplay />
+        <FrequencyDisplay analyserRef={analyserRef} />
 
         <div className="flex flex-col gap-4">
           {channels.map((ch) => (

@@ -1,13 +1,11 @@
 import { useState } from 'react'
-import type { OscillatorChannel, Waveform } from '../types'
-import { sliderToHz, hzToSlider, MIN_HZ, MAX_HZ } from '../types'
+import type { OscillatorChannel } from '../types'
+import { sliderToHz, hzToSlider, MIN_HZ, MAX_HZ, OSC_WAVEFORMS, NOISE_TYPES, isNoise } from '../types'
 import { useSynthStore } from '../store/useSynthStore'
 
 type Props = {
   channel: OscillatorChannel
 }
-
-const WAVEFORMS: Waveform[] = ['sine', 'triangle', 'sawtooth']
 
 export function ChannelStrip({ channel }: Props) {
   const updateChannel = useSynthStore((s) => s.updateChannel)
@@ -121,27 +119,46 @@ export function ChannelStrip({ channel }: Props) {
         </div>
       </div>
 
-      {/* 波形 */}
-      <div className="flex gap-1">
-        {WAVEFORMS.map((wf) => (
-          <button
-            key={wf}
-            onClick={() => update({ waveform: wf })}
-            className={`flex-1 py-1 rounded text-xs font-medium transition-colors ${
-              channel.waveform === wf
-                ? 'bg-indigo-500 text-white'
-                : 'bg-gray-700 text-gray-400 hover:bg-gray-600'
-            }`}
-          >
-            {wf}
-          </button>
-        ))}
+      {/* 波形 / ノイズ選択 */}
+      <div className="flex flex-col gap-1">
+        <div className="flex gap-1">
+          {OSC_WAVEFORMS.map((wf) => (
+            <button
+              key={wf}
+              onClick={() => update({ waveform: wf })}
+              className={`flex-1 py-1 rounded text-xs font-medium transition-colors ${
+                channel.waveform === wf
+                  ? 'bg-indigo-500 text-white'
+                  : 'bg-gray-700 text-gray-400 hover:bg-gray-600'
+              }`}
+            >
+              {wf}
+            </button>
+          ))}
+        </div>
+        <div className="flex gap-1">
+          {NOISE_TYPES.map((nt) => (
+            <button
+              key={nt}
+              onClick={() => update({ waveform: nt })}
+              className={`flex-1 py-1 rounded text-xs font-medium transition-colors ${
+                channel.waveform === nt
+                  ? 'bg-amber-500 text-white'
+                  : 'bg-gray-700 text-gray-400 hover:bg-gray-600'
+              }`}
+            >
+              {nt}
+            </button>
+          ))}
+        </div>
       </div>
 
-      {/* 周波数 */}
+      {/* 周波数 / BPF中心周波数 */}
       <div className="flex flex-col gap-1">
         <div className="flex items-center justify-between">
-          <span className="text-gray-400 text-xs">Frequency</span>
+          <span className="text-gray-400 text-xs">
+            {isNoise(channel.waveform) ? 'BPF Center' : 'Frequency'}
+          </span>
           <div className="flex items-center gap-1">
             <button
               onClick={() => nudgeFreq(-1)}
